@@ -92,7 +92,7 @@ def getPostContent(postIds):
                                 tkkttCount += 1
                                 pw_urls.append('xxxxxxxxx/tkktt/' + d['file_name'])
                                 print(str(tkkttCount) + '. 來自tkktt的圖片：' + d['file_name'])
-                        else: # 表示為圖片
+                        else: # 表示為影片
                             videoCount += 1
                             print(str(videoCount) + '. Video: ' + d['link_url'] + ' Password: ' + d['file_name'])
                             record.write(d['link_url'] + ' ' + d['file_name'] + '\n') # 影片額外存在darkka.txt                       
