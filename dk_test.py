@@ -74,28 +74,33 @@ def getPostContent(postIds):
         r = result.get(url, headers=logined_headers, allow_redirects=False)
         j_datas = json.loads(r.text)
         
-        # 新版api from xxx/xxx/xxx/xxxgetV2Post?post_id=
+        # 新版api from xxx/xxx/xxx/xxxgetV2Post?xxx
         for data in j_datas['floors']:
             if data['sex'] == 1:
                 for d in data['images']: # 取得一般imgur的圖片
                     imgCount += 1
                     print( str(imgCount) + '. General Image from: ' + 'https://imgur.com/' + d['image_name'])
-                    image_urls.append('https://imgur.com/' + d['image_name'])                
-                if data['link'] != None: # link欄位不為None，表示有備份的圖片或影片
-                    for d in data['link']['link_results']:
-                        if '.jpg' in d['file_name']: # 表示為圖片
-                            if 'ppt.cc' in d['link_url']: # 來自ppt.cc的圖片
-                                pptCount += 1
-                                pw_urls.append('xxxxxxxxx/ppt/' + d['file_name'])
-                                print(str(pptCount) + '. 來自ppt.cc的圖片：' + d['file_name'])
-                            else: # 來自tkktt的圖片
-                                tkkttCount += 1
-                                pw_urls.append('xxxxxxxxx/tkktt/' + d['file_name'])
-                                print(str(tkkttCount) + '. 來自tkktt的圖片：' + d['file_name'])
-                        else: # 表示為影片
-                            videoCount += 1
-                            print(str(videoCount) + '. Video: ' + d['link_url'] + ' Password: ' + d['file_name'])
-                            record.write(d['link_url'] + ' ' + d['file_name'] + '\n') # 影片額外存在darkka.txt                       
+                    image_urls.append('https://imgur.com/' + d['image_name'])
+                if data['links'] != None: # link欄位不為None，表示有備份的圖片或影片
+                    for d in data['links']:
+                        try:
+                            if None == d['file_name']:
+                                print('its a trash ' + url)
+                            elif '.jpg' in d['file_name']: # 表示為圖片
+                                if 'ppt.cc' in d['link']: # 來自ppt.cc的圖片
+                                    pptCount += 1
+                                    pw_urls.append('https://xxx' + d['file_name'])
+                                    print(str(pptCount) + '. 來自ppt.cc的圖片：' + d['file_name'])
+                                else: # 來自tkktt的圖片
+                                    tkkttCount += 1
+                                    pw_urls.append('https://xxx' + d['file_name'])
+                                    print(str(tkkttCount) + '. 來自tkktt的圖片：' + d['file_name'])
+                            else: # 表示為影片
+                                videoCount += 1
+                                print('---------------------\n' +str(videoCount) + '. Video: ' + d['link'] + ' Password: ' + d['file_name'] + '\n---------------------')
+                                record.write(d['link'] + ' ' + d['file_name'] + '\n')
+                        except:
+                            print('tkktt function is got banned, need to check: ' + url + ' or it isnt a picture or video')                    
 
 #         # 舊版api，已經無效
 #         # 取出備份的ppt.cc圖片url
